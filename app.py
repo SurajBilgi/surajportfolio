@@ -32,7 +32,7 @@ def contact():
 
 @app.route('/portfolio')
 def portfolio():
-    return render_template("portfolio.html")
+    return render_template("portfolio - Copy.html")
 
 @app.route('/resume')
 def surajresume():
