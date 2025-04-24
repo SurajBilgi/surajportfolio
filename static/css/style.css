@@ -1761,3 +1761,137 @@ body.light hr.separator {
     margin-top: 35px !important;
   }
 }
+
+/* Photo Gallery Styles */
+.gallery-wrapper {
+  position: relative;
+  height: 600px;
+  perspective: 1000px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.photo-gallery-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.gallery-item {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  left: 50%;
+  top: 50%;
+  margin-left: -150px;
+  margin-top: -150px;
+  transform: 
+    rotateY(calc(var(--item-number) * 60deg)) 
+    translateZ(400px);
+  transition: all 0.5s ease-in-out;
+  backface-visibility: hidden;
+}
+
+.gallery-item-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+  transform: scale(0.9);
+  transition: transform 0.5s;
+}
+
+.gallery-item-inner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s;
+}
+
+.gallery-item-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 20px;
+  transform: translateY(100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.gallery-item-overlay h4 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.gallery-item-overlay p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.gallery-item:hover .gallery-item-inner {
+  transform: scale(1);
+}
+
+.gallery-item:hover .gallery-item-overlay {
+  transform: translateY(0);
+}
+
+.gallery-item:hover .gallery-item-inner img {
+  transform: scale(1.1);
+}
+
+.gallery-nav {
+  margin-top: 30px;
+}
+
+.gallery-nav .btn {
+  margin: 0 10px;
+  padding: 10px 20px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s;
+}
+
+.gallery-nav .btn:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 991px) {
+  .gallery-wrapper {
+    height: 500px;
+  }
+  
+  .gallery-item {
+    width: 250px;
+    height: 250px;
+    margin-left: -125px;
+    margin-top: -125px;
+    transform: 
+      rotateY(calc(var(--item-number) * 60deg)) 
+      translateZ(350px);
+  }
+}
+
+@media (max-width: 576px) {
+  .gallery-wrapper {
+    height: 400px;
+  }
+  
+  .gallery-item {
+    width: 200px;
+    height: 200px;
+    margin-left: -100px;
+    margin-top: -100px;
+    transform: 
+      rotateY(calc(var(--item-number) * 60deg)) 
+      translateZ(250px);
+  }
+}

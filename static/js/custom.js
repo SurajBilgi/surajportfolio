@@ -138,5 +138,154 @@
 		}
 	});
 
+	/* Photo Gallery */
+	document.addEventListener('DOMContentLoaded', function() {
+		const galleryContainer = document.querySelector('.photo-gallery-container');
+		const prevBtn = document.getElementById('prev-btn');
+		const nextBtn = document.getElementById('next-btn');
+		let currentRotation = 0;
+		let autoRotate = true;
+		let autoRotateInterval;
+		
+		// Function to rotate the gallery
+		function rotateGallery(degrees) {
+			currentRotation = degrees;
+			galleryContainer.style.transform = `rotateY(${degrees}deg)`;
+		}
+		
+		// Initialize auto rotation
+		function startAutoRotate() {
+			autoRotateInterval = setInterval(() => {
+				currentRotation -= 60;
+				rotateGallery(currentRotation);
+			}, 3000);
+		}
+		
+		// Stop auto rotation
+		function stopAutoRotate() {
+			clearInterval(autoRotateInterval);
+		}
+		
+		// Navigation button event listeners
+		if (prevBtn && nextBtn) {
+			prevBtn.addEventListener('click', function() {
+				currentRotation += 60;
+				rotateGallery(currentRotation);
+				
+				// Pause auto-rotate when user interacts
+				if (autoRotate) {
+					stopAutoRotate();
+					autoRotate = false;
+					
+					// Resume after 10 seconds of inactivity
+					setTimeout(() => {
+						if (!autoRotate) {
+							startAutoRotate();
+							autoRotate = true;
+						}
+					}, 10000);
+				}
+			});
+			
+			nextBtn.addEventListener('click', function() {
+				currentRotation -= 60;
+				rotateGallery(currentRotation);
+				
+				// Pause auto-rotate when user interacts
+				if (autoRotate) {
+					stopAutoRotate();
+					autoRotate = false;
+					
+					// Resume after 10 seconds of inactivity
+					setTimeout(() => {
+						if (!autoRotate) {
+							startAutoRotate();
+							autoRotate = true;
+						}
+					}, 10000);
+				}
+			});
+		}
+		
+		// Mouse drag to rotate
+		let isDragging = false;
+		let startX;
+		let startRotation;
+		
+		if (galleryContainer) {
+			galleryContainer.addEventListener('mousedown', function(e) {
+				isDragging = true;
+				startX = e.clientX;
+				startRotation = currentRotation;
+				
+				// Stop auto-rotate when user interacts
+				if (autoRotate) {
+					stopAutoRotate();
+					autoRotate = false;
+				}
+			});
+			
+			document.addEventListener('mousemove', function(e) {
+				if (isDragging) {
+					const deltaX = e.clientX - startX;
+					const newRotation = startRotation + deltaX / 5;
+					rotateGallery(newRotation);
+				}
+			});
+			
+			document.addEventListener('mouseup', function() {
+				isDragging = false;
+				
+				// Snap to nearest image
+				const snapAngle = Math.round(currentRotation / 60) * 60;
+				rotateGallery(snapAngle);
+				
+				// Resume auto-rotate after 10 seconds
+				setTimeout(() => {
+					if (!autoRotate) {
+						startAutoRotate();
+						autoRotate = true;
+					}
+				}, 10000);
+			});
+			
+			// Touch events for mobile
+			galleryContainer.addEventListener('touchstart', function(e) {
+				isDragging = true;
+				startX = e.touches[0].clientX;
+				startRotation = currentRotation;
+				
+				if (autoRotate) {
+					stopAutoRotate();
+					autoRotate = false;
+				}
+			});
+			
+			document.addEventListener('touchmove', function(e) {
+				if (isDragging) {
+					const deltaX = e.touches[0].clientX - startX;
+					const newRotation = startRotation + deltaX / 5;
+					rotateGallery(newRotation);
+				}
+			});
+			
+			document.addEventListener('touchend', function() {
+				isDragging = false;
+				
+				const snapAngle = Math.round(currentRotation / 60) * 60;
+				rotateGallery(snapAngle);
+				
+				setTimeout(() => {
+					if (!autoRotate) {
+						startAutoRotate();
+						autoRotate = true;
+					}
+				}, 10000);
+			});
+			
+			// Start auto-rotation
+			startAutoRotate();
+		}
+	});
 
 })(jQuery);
